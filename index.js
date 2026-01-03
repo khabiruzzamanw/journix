@@ -3,12 +3,48 @@ const savedDiarySection = document.querySelector("#savedDiarySection");
 const getText = document.querySelector("#getText");
 const headingInput = document.querySelector("#headingInput");
 
-getText.addEventListener("click", addDiary);
+let localDataArray = JSON.parse(localStorage.getItem('key')) || [];
+getData(localDataArray);
 
-function addDiary() {
+getText.addEventListener("click", (e) => {
+  e.preventDefault();
+
   const text = userInput.value;
   const headingText = headingInput.value;
 
+  const obj = {
+    heading: headingText,
+    text: text,
+  };
+
+  localDataArray.push(obj);
+
+  setData(localDataArray);
+
+  userInput.value = "";
+  headingInput.value = "";
+});
+
+function setData(localDataArray) {  
+
+  localStorage.setItem("key", JSON.stringify(localDataArray));
+
+  getData(localDataArray);
+}
+
+function getData(localDataArray) {
+  // const data = JSON.parse(localStorage.getItem("key"));
+
+  savedDiarySection.innerHTML = '';
+
+  // console.log(data);
+
+  localDataArray.forEach((element,index) => {
+    showJournal(element.text, element.heading,index);
+  });
+}
+
+function showJournal(text, headingText,index) {
   const diary = document.createElement("div");
   diary.setAttribute("class", "note");
 
@@ -57,7 +93,10 @@ function addDiary() {
   savedDiarySection.appendChild(diaryContainer);
 
   noteDelete.addEventListener("click", () => {
-    savedDiarySection.removeChild(diaryContainer);
+    // savedDiarySection.removeChild(diaryContainer);
+
+    localDataArray.splice(index,1);
+    setData(localDataArray);
   });
 
   noteEdit.addEventListener("click", () => {
@@ -68,7 +107,7 @@ function addDiary() {
     // diary.appendChild(headingEditInput);
     diary.replaceChild(headingEditInput, journalHeading);
 
-    const paraEditInput = document.createElement("input");
+    const paraEditInput = document.createElement("textarea");
     paraEditInput.setAttribute("class", "paraEdittng");
     paraEditInput.value = journalPara.innerText;
     // diary.removeChild(journalPara);
@@ -78,17 +117,19 @@ function addDiary() {
 
     noteSave.style.opacity = "1";
 
-    noteSave.addEventListener("click", () => {
+    noteSave.onclick = () => {
       journalHeading.innerText = headingEditInput.value;
       journalPara.innerText = paraEditInput.value;
 
-      diary.replaceChild(journalHeading, headingEditInput);
-      diary.replaceChild(journalPara, paraEditInput);
+      // diary.replaceChild(journalHeading, headingEditInput);
+      // diary.replaceChild(journalPara, paraEditInput);
+
+      localDataArray[index].heading = headingEditInput.value;
+      localDataArray[index].text = paraEditInput.value;
+
+      setData(localDataArray);
 
       noteSave.style.opacity = "0.1";
-    });
+    };
   });
-
-  userInput.value = "";
-  headingInput.value = "";
 }
