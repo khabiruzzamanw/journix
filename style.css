@@ -71,15 +71,20 @@ ul li a {
 }
 
 .searchBar {
-  background-color:transparent;
+  background-color: transparent;
   border-bottom: 1px solid var(--bar-color);
   border-radius: 1rem;
   font-size: 1rem;
   padding: 0.25rem 0.5rem;
+  transition: border-color 0.2s ease-in;
 }
 
 .searchBar:enabled {
   color: var(--font-color);
+}
+
+.searchBar:focus-within {
+  border-color: var(--red-accent);
 }
 
 main {
@@ -106,6 +111,11 @@ main {
   font-size: 1rem;
   border-radius: 1rem;
   border: 0.1rem solid var(--bar-color);
+  transition: border-color 0.2s ease-in;
+}
+
+.headingInput:focus-within {
+  border-color: var(--red-accent);
 }
 
 .textZone {
@@ -118,6 +128,11 @@ main {
   font-size: 1rem;
   resize: vertical;
   border-radius: 1rem;
+  transition: border-color 0.1s ease-in;
+}
+
+.textZone:focus-within {
+  border-color: var(--red-accent);
 }
 
 .addButton {
@@ -171,17 +186,29 @@ main {
   background-color: var(--input-bg-color);
   color: var(--input-color);
   font-size: 1rem;
-  border: 0.1px solid var(--red-accent);
+  border: 0.1px solid var(--bar-color);
   padding: 0.5rem;
   border-radius: 1rem;
+  transition: border-color 0.2s ease-in;
 }
+
+.headingEdittng:focus-within {
+  border-color: var(--red-accent);
+}
+
 .paraEdittng {
   background-color: var(--input-bg-color);
   color: var(--input-color);
   font-size: 1rem;
-  border: 0.1px solid var(--red-accent);
+  border: 0.1px solid var(--bar-color);
   padding: 0.5rem;
   border-radius: 1rem;
+  resize: vertical;
+  transition: border-color 0.2s ease-in;
+}
+
+.paraEdittng:focus-within {
+  border-color: var(--red-accent);
 }
 
 .correction {
