@@ -3,7 +3,7 @@ const savedDiarySection = document.querySelector("#savedDiarySection");
 const getText = document.querySelector("#getText");
 const headingInput = document.querySelector("#headingInput");
 
-let localDataArray = JSON.parse(localStorage.getItem('key')) || [];
+let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
 getData(localDataArray);
 
 getText.addEventListener("click", (e) => {
@@ -25,26 +25,21 @@ getText.addEventListener("click", (e) => {
   headingInput.value = "";
 });
 
-function setData(localDataArray) {  
-
+function setData(localDataArray) {
   localStorage.setItem("key", JSON.stringify(localDataArray));
 
   getData(localDataArray);
 }
 
 function getData(localDataArray) {
-  // const data = JSON.parse(localStorage.getItem("key"));
+  savedDiarySection.innerHTML = "";
 
-  savedDiarySection.innerHTML = '';
-
-  // console.log(data);
-
-  localDataArray.forEach((element,index) => {
-    showJournal(element.text, element.heading,index);
+  localDataArray.forEach((element, index) => {
+    showJournal(element.text, element.heading, index);
   });
 }
 
-function showJournal(text, headingText,index) {
+function showJournal(text, headingText, index) {
   const diary = document.createElement("div");
   diary.setAttribute("class", "note");
 
@@ -93,9 +88,7 @@ function showJournal(text, headingText,index) {
   savedDiarySection.appendChild(diaryContainer);
 
   noteDelete.addEventListener("click", () => {
-    // savedDiarySection.removeChild(diaryContainer);
-
-    localDataArray.splice(index,1);
+    localDataArray.splice(index, 1);
     setData(localDataArray);
   });
 
@@ -103,26 +96,19 @@ function showJournal(text, headingText,index) {
     const headingEditInput = document.createElement("input");
     headingEditInput.setAttribute("class", "headingEdittng");
     headingEditInput.value = journalHeading.innerText;
-    // diary.removeChild(headingEditInput);
-    // diary.appendChild(headingEditInput);
+
     diary.replaceChild(headingEditInput, journalHeading);
 
     const paraEditInput = document.createElement("textarea");
     paraEditInput.setAttribute("class", "paraEdittng");
     paraEditInput.value = journalPara.innerText;
-    // diary.removeChild(journalPara);
-    // diary.appendChild(paraEditInput);
-    diary.replaceChild(paraEditInput, journalPara);
-    // console.log(headingChange);
 
+    diary.replaceChild(paraEditInput, journalPara);
     noteSave.style.opacity = "1";
 
     noteSave.onclick = () => {
       journalHeading.innerText = headingEditInput.value;
       journalPara.innerText = paraEditInput.value;
-
-      // diary.replaceChild(journalHeading, headingEditInput);
-      // diary.replaceChild(journalPara, paraEditInput);
 
       localDataArray[index].heading = headingEditInput.value;
       localDataArray[index].text = paraEditInput.value;
