@@ -6,8 +6,8 @@
   --button-color: #333333;
   --font-color: #f2f2f2;
   --bar-color: rgba(255, 255, 255, 0.15);
-  --red-accent: crimson;
-  --box-shadow-color: rgba(150, 150, 150, 0.01);
+  --red-accent: rgb(220, 20, 60);
+  --box-shadow-color: rgba(220, 20, 60, 0.1);
 
   --input-bg-color: rgba(255, 255, 255, 0);
   --input-color: white;
@@ -38,7 +38,6 @@ header {
   z-index: 1000;
   top: 0;
   background-color: var(--glass-effect-color);
-  /* background-color:rgba(150, 150, 150, 0.35); */
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border-bottom: 1px solid var(--bar-color);
@@ -110,12 +109,14 @@ main {
   color: var(--input-color);
   font-size: 1rem;
   border-radius: 1rem;
-  border: 0.1rem solid var(--bar-color);
-  transition: border-color 0.2s ease-in;
+  border: 1px solid var(--bar-color);
+  transition: border-color 0.2s ease-in, box-shadow 0.2s ease-in;
+  /* box-shadow: 0 0 1rem white; */
 }
 
 .headingInput:focus-within {
   border-color: var(--red-accent);
+  box-shadow: 0 0 5rem var(--box-shadow-color);
 }
 
 .textZone {
@@ -128,11 +129,12 @@ main {
   font-size: 1rem;
   resize: vertical;
   border-radius: 1rem;
-  transition: border-color 0.1s ease-in;
+  transition: border-color 0.2s ease-in, box-shadow 0.2s ease-in;
 }
 
 .textZone:focus-within {
   border-color: var(--red-accent);
+  box-shadow: 0 0 5rem var(--box-shadow-color);
 }
 
 .addButton {
@@ -146,13 +148,19 @@ main {
 
 .savedDiarySection {
   width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .savedDiarySection h2 {
   margin-bottom: 5rem;
   text-align: center;
+  border-bottom: 0.15rem solid var(--bar-color);
+  padding-bottom: 1rem;
+}
+
+.savedDiary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .noteContainer {
@@ -176,6 +184,7 @@ main {
   color: var(--journal-color);
   text-align: center;
   margin-bottom: 1rem;
+  border-bottom: 0.1rem solid var(--bar-color);
 }
 .notePara {
   color: var(--heading-color);
@@ -206,7 +215,7 @@ main {
   resize: vertical;
   transition: border-color 0.2s ease-in;
 }
-
+/* background-color:rgba(150, 150, 150, 0.35); */
 .paraEdittng:focus-within {
   border-color: var(--red-accent);
 }

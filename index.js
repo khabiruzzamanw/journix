@@ -1,5 +1,5 @@
 const userInput = document.querySelector("#inputText");
-const savedDiarySection = document.querySelector("#savedDiarySection");
+const savedDiary = document.querySelector("#savedDiary");
 const getText = document.querySelector("#getText");
 const headingInput = document.querySelector("#headingInput");
 
@@ -32,7 +32,7 @@ function setData(localDataArray) {
 }
 
 function getData(localDataArray) {
-  savedDiarySection.innerHTML = "";
+  savedDiary.innerHTML = "";
 
   localDataArray.forEach((element, index) => {
     showJournal(element.text, element.heading, index);
@@ -85,7 +85,7 @@ function showJournal(text, headingText, index) {
   correction.appendChild(noteDelete);
   correction.appendChild(noteEdit);
   correction.appendChild(noteSave);
-  savedDiarySection.appendChild(diaryContainer);
+  savedDiary.appendChild(diaryContainer);
 
   noteDelete.addEventListener("click", () => {
     localDataArray.splice(index, 1);
