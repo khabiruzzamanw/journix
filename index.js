@@ -10,8 +10,8 @@ getData(localDataArray);
 getText.addEventListener("click", (e) => {
   e.preventDefault();
 
-  const text = userInput.value;
-  const headingText = headingInput.value;
+  const text = userInput.value.trim();
+  const headingText = headingInput.value.trim();
 
 
   if (text !== '' && headingText !== '') {
