@@ -43,7 +43,6 @@ function setData(localDataArray) {
 
 
 function getData(localDataArray) {
-
   localDataArray.forEach((element, index) => {
     showJournal(element.text, element.heading, element.id);
   });
