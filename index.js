@@ -4,6 +4,7 @@ const getText = document.querySelector("#getText");
 const headingInput = document.querySelector("#headingInput");
 
 let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
+
 getData(localDataArray);
 
 getText.addEventListener("click", (e) => {
@@ -12,34 +13,46 @@ getText.addEventListener("click", (e) => {
   const text = userInput.value;
   const headingText = headingInput.value;
 
-  const obj = {
-    heading: headingText,
-    text: text,
-  };
 
-  localDataArray.push(obj);
+  if (text !== '' && headingText !== '') {
+    const obj = {
+      heading: headingText,
+      text: text,
+      id: Date.now()
+    };
 
-  setData(localDataArray);
+    localDataArray.push(obj);
 
-  userInput.value = "";
-  headingInput.value = "";
+    setData(localDataArray);
+
+    showJournal(obj.text, obj.heading, obj.id)
+
+    userInput.value = "";
+    headingInput.value = "";
+  }
+
 });
+
+
 
 function setData(localDataArray) {
   localStorage.setItem("key", JSON.stringify(localDataArray));
-
-  getData(localDataArray);
 }
 
+
+
+
 function getData(localDataArray) {
-  savedDiary.innerHTML = "";
 
   localDataArray.forEach((element, index) => {
-    showJournal(element.text, element.heading, index);
+    showJournal(element.text, element.heading, element.id);
   });
 }
 
-function showJournal(text, headingText, index) {
+
+
+
+function showJournal(text, headingText, id) {
   const diary = document.createElement("div");
   diary.setAttribute("class", "note");
 
@@ -87,10 +100,18 @@ function showJournal(text, headingText, index) {
   correction.appendChild(noteSave);
   savedDiary.appendChild(diaryContainer);
 
+
   noteDelete.addEventListener("click", () => {
-    localDataArray.splice(index, 1);
+
+    localDataArray = localDataArray.filter((journal) => {
+
+      return journal.id !== id;
+    });
+
     setData(localDataArray);
+    diaryContainer.remove();
   });
+
 
   noteEdit.addEventListener("click", () => {
     const headingEditInput = document.createElement("input");
@@ -104,18 +125,41 @@ function showJournal(text, headingText, index) {
     paraEditInput.value = journalPara.innerText;
 
     diary.replaceChild(paraEditInput, journalPara);
+
+    noteEdit.style.opacity = "0.1";
+    noteEdit.disabled = true;
     noteSave.style.opacity = "1";
 
+
     noteSave.onclick = () => {
-      journalHeading.innerText = headingEditInput.value;
-      journalPara.innerText = paraEditInput.value;
 
-      localDataArray[index].heading = headingEditInput.value;
-      localDataArray[index].text = paraEditInput.value;
+      const editableObject = localDataArray.find((element) => {
 
-      setData(localDataArray);
+        return element.id === id;
+      })
+      if (editableObject) {
 
-      noteSave.style.opacity = "0.1";
+        if (editableObject.heading !== headingEditInput.value || editableObject.innerText !== paraEditInput.value) {
+
+          editableObject.heading = headingEditInput.value;
+          editableObject.text = paraEditInput.value;
+
+          journalHeading.innerText = headingEditInput.value;
+          journalPara.innerText = paraEditInput.value;
+        }
+
+        diary.replaceChild(journalHeading, headingEditInput);
+        diary.replaceChild(journalPara, paraEditInput);
+
+        setData(localDataArray);
+
+        noteSave.style.opacity = "0.1";
+        noteEdit.style.opacity = "1";
+        noteEdit.disabled = false;
+      };
+
     };
+
   });
-}
+
+};
