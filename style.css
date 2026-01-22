@@ -1,0 +1,258 @@
+:root {
+  --bg-color: #111111;
+  --bg-accent-up: #ffffff15;
+  --bg-accent-down: #ffffff15;
+  --glass-effect-color: rgba(255, 255, 255, 0);
+  --button-color: #333333;
+  --font-color: #f2f2f2;
+  --bar-color: rgba(255, 255, 255, 0.15);
+  --red-accent: rgb(220, 20, 60);
+  --box-shadow-color: rgba(220, 20, 60, 0.1);
+
+  --input-bg-color: rgba(255, 255, 255, 0);
+  --input-color: white;
+  --journal-color: lightBlue;
+  --heading-color: lightpink;
+  --card-bg-color: #333333;
+}
+
+* {
+  padding: 0px;
+  margin: 0px;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  width: 100%;
+  position: -webkit-fixed;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  background-color: var(--glass-effect-color);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-bottom: 1px solid var(--bar-color);
+  border-radius: 0 0 1rem 1rem;
+}
+
+nav {
+  width: 100%;
+  padding: 1rem;
+}
+
+ul {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+}
+
+ul li:first-child {
+  margin-right: auto;
+}
+
+ul li:last-child {
+  display: flex;
+  gap: 0.5rem;
+}
+
+ul li a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+.searchBar {
+  background-color: transparent;
+  border-bottom: 1px solid var(--bar-color);
+  border-radius: 1rem;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  transition: border-color 0.2s ease-in;
+}
+
+.searchBar:enabled {
+  color: var(--font-color);
+}
+
+.searchBar:focus-within {
+  border-color: var(--red-accent);
+}
+
+main {
+  margin: 5rem 0;
+  padding: 0 25vw;
+}
+
+.inputContainer {
+  width: 100%;
+  margin-bottom: 5rem;
+}
+
+.inputItem {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.headingInput {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--input-bg-color);
+  color: var(--input-color);
+  font-size: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--bar-color);
+  transition: border-color 0.2s ease-in, box-shadow 0.2s ease-in;
+  /* box-shadow: 0 0 1rem white; */
+}
+
+.headingInput:focus-within {
+  border-color: var(--red-accent);
+  box-shadow: 0 0 5rem var(--box-shadow-color);
+}
+
+.textZone {
+  box-sizing: border-box;
+  border: 0.2rem solid var(--bar-color);
+  min-height: 20rem;
+  padding: 0.5rem;
+  background-color: var(--input-bg-color);
+  color: var(--input-color);
+  font-size: 1rem;
+  resize: vertical;
+  border-radius: 1rem;
+  transition: border-color 0.2s ease-in, box-shadow 0.2s ease-in;
+}
+
+.textZone:focus-within {
+  border-color: var(--red-accent);
+  box-shadow: 0 0 5rem var(--box-shadow-color);
+}
+
+.addButton {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  color: var(--font-color);
+  border-radius: 1rem;
+  background-color: var(--button-color);
+  cursor: pointer;
+}
+
+.savedDiarySection {
+  width: 100%;
+}
+
+.savedDiarySection h2 {
+  margin-bottom: 5rem;
+  text-align: center;
+  border-bottom: 0.15rem solid var(--bar-color);
+  padding-bottom: 1rem;
+}
+
+.savedDiary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.noteContainer {
+  display: flex;
+  width: 100%;
+  gap: 0.5rem;
+  margin-top: 5rem;
+}
+
+.note {
+  width: 100%;
+  background-color: var(--card-bg-color);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.noteHeading {
+  color: var(--journal-color);
+  text-align: center;
+  margin-bottom: 1rem;
+  border-bottom: 0.1rem solid var(--bar-color);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.notePara {
+  color: var(--heading-color);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.headingEdittng {
+  text-align: center;
+  background-color: var(--input-bg-color);
+  color: var(--input-color);
+  font-size: 1rem;
+  border: 0.1px solid var(--bar-color);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  transition: border-color 0.2s ease-in;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.headingEdittng:focus-within {
+  border-color: var(--red-accent);
+}
+
+.paraEdittng {
+  background-color: var(--input-bg-color);
+  color: var(--input-color);
+  font-size: 1rem;
+  border: 0.1px solid var(--bar-color);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  resize: vertical;
+  transition: border-color 0.2s ease-in;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* background-color:rgba(150, 150, 150, 0.35); */
+.paraEdittng:focus-within {
+  border-color: var(--red-accent);
+}
+
+.correction {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.noteEdit {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.noteDelete {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.noteSave {
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 0.1;
+}

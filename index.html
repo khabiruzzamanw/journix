@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Journix</title>
+</head>
+
+<body id="home">
+  <header>
+    <nav>
+      <ul>
+        <li class=""><a href="#home" class="">Home</a></li>
+        <li class=""><a href="#" class="">New</a></li>
+        <li class=""><a href="#" class="">Saved</a></li>
+        <li class="">
+          <span>
+            <input type="search" name="" id="" class="searchBar" placeholder="Search" />
+          </span>
+          <span>
+            <img src="images/searchLight.svg" alt="">
+          </span>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="inputContainer">
+      <div class="inputItem">
+        <input type="text" id="headingInput" class="headingInput" placeholder="Write your Note heading" />
+        <textarea name="" id="inputText" class="textZone" placeholder="Your Journal context"></textarea>
+        <button id="getText" class="addButton">Add</button>
+      </div>
+    </section>
+    <section id="savedDiarySection" class="savedDiarySection">
+      <h2>Saved Diaries</h2>
+      <div id="savedDiary" class="savedDiary"></div>
+    </section>
+  </main>
+  
+<script src="index.js"></script>
+  
+</body>
+
+</html>
