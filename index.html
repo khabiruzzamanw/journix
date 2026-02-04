@@ -8,40 +8,56 @@
   <title>Journix</title>
 </head>
 
-<body id="home">
+<body id="home" class="dark">
   <header>
     <nav>
       <ul>
         <li class=""><a href="#home" class="">Home</a></li>
-        <li class=""><a href="#" class="">New</a></li>
-        <li class=""><a href="#" class="">Saved</a></li>
-        <li class="">
+        <li class="searchBar">
           <span>
-            <input type="search" name="" id="" class="searchBar" placeholder="Search" />
+            <input type="search" name="" id="search" class="search" placeholder="Search" />
           </span>
           <span>
-            <img src="images/searchLight.svg" alt="">
+            <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
           </span>
         </li>
+        <li><img src="images/darkMode.svg" class="theme" id="theme" alt=""></li>
       </ul>
     </nav>
   </header>
+
   <main>
-    <section class="inputContainer">
-      <div class="inputItem">
-        <input type="text" id="headingInput" class="headingInput" placeholder="Write your Note heading" />
-        <textarea name="" id="inputText" class="textZone" placeholder="Your Journal context"></textarea>
-        <button id="getText" class="addButton">Add</button>
-      </div>
-    </section>
-    <section id="savedDiarySection" class="savedDiarySection">
-      <h2>Saved Diaries</h2>
-      <div id="savedDiary" class="savedDiary"></div>
+    <section class="mainPage" id="mainPage">
+      <section id="noteCreation" class="noteCreation">
+
+        <div id="addNote" class="addNote">
+          <img src="images/addNoteLight.svg" id="addNoteButton" class="addNoteButton" alt="">
+          <img src="images/doneLight.svg" id="doneNoteButton" class="doneNoteButton" alt="">
+        </div>
+
+        <div class="inputItem" id="inputItem">
+          <input type="text" id="headingInput" class="headingInput" placeholder="Write your Note heading" />
+          <textarea name="" id="textInput" class="textInput" placeholder="Your Journal context">
+
+        </textarea>
+          <button id="addButton" class="addButton">Add</button>
+        </div>
+
+
+      </section>
+
+      <section id="savedDiarySection" class="savedDiarySection">
+
+        <div id="savedDiary" class="savedDiary">
+
+        </div>
+
+      </section>
     </section>
   </main>
-  
-<script src="index.js"></script>
-  
+
+  <script src="index.js"></script>
+
 </body>
 
 </html>

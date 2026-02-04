@@ -1,103 +1,117 @@
-const userInput = document.querySelector("#inputText");
-const savedDiary = document.querySelector("#savedDiary");
-const getText = document.querySelector("#getText");
-const headingInput = document.querySelector("#headingInput");
 
 let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
 
+themeChanger();
+noteCreation();
 getData(localDataArray);
 
-getText.addEventListener("click", (e) => {
-  e.preventDefault();
 
-  const text = userInput.value.trim();
-  const headingText = headingInput.value.trim();
+function noteCreation() {
+
+  const addButton = document.querySelector("#addButton");
+  const inputItem = document.querySelector("#inputItem");
+  const addNoteButton = document.querySelector("#addNoteButton");
+  const doneNoteButton = document.querySelector("#doneNoteButton");
+
+  addNoteButton.addEventListener('click', () => {
+
+    inputItem.style.display = 'flex';
+    doneNoteButton.style.display = 'block';
+
+  });
+
+  doneNoteButton.addEventListener('click', () => {
+    inputItem.style.display = 'none';
+    doneNoteButton.style.display = 'none';
+  });
+
+  addButton.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const textInput = document.querySelector("#textInput");
+    const headingInput = document.querySelector("#headingInput");
+
+    const text = textInput.value.trim();
+    const headingText = headingInput.value.trim();
+
+    const timeDateDigit = new Date();
+    const timeDigit = timeDateDigit.toLocaleTimeString();
+    const dateDigit = timeDateDigit.toLocaleDateString('en-Gb').replace(/\//g, ".");
 
 
-  if (text !== '' && headingText !== '') {
-    const obj = {
-      heading: headingText,
-      text: text,
-      id: Date.now()
-    };
+    if (text !== '' && headingText !== '') {
+      const obj = {
+        heading: headingText,
+        text: text,
+        id: Date.now(),
+        date: dateDigit,
+        time: timeDigit
+      };
 
-    localDataArray.push(obj);
+      localDataArray.push(obj);
 
-    setData(localDataArray);
+      setData(localDataArray);
 
-    showJournal(obj.text, obj.heading, obj.id)
+      showJournal(obj.text, obj.heading, obj.id, obj.date, obj.time)
 
-    userInput.value = "";
-    headingInput.value = "";
-  }
+      textInput.value = "";
+      headingInput.value = "";
+    }
 
-});
+  });
+
+
+};
+
 
 
 
 function setData(localDataArray) {
   localStorage.setItem("key", JSON.stringify(localDataArray));
-}
+};
 
 
 
 
 function getData(localDataArray) {
   localDataArray.forEach((element, index) => {
-    showJournal(element.text, element.heading, element.id);
+    showJournal(element.text, element.heading, element.id, element.date, element.time);
   });
-}
+};
 
 
 
 
-function showJournal(text, headingText, id) {
-  const diary = document.createElement("div");
-  diary.setAttribute("class", "note");
-
-  const correction = document.createElement("div");
-  correction.setAttribute("class", "correction");
-
+function showJournal(text, headingText, id, date, time) {
+  const savedDiary = document.querySelector("#savedDiary");
   const diaryContainer = document.createElement("div");
   diaryContainer.setAttribute("class", "noteContainer");
 
-  const journalPara = document.createElement("p");
-  journalPara.setAttribute("class", "notePara");
-  journalPara.innerText = `${text}`;
+  diaryContainer.innerHTML = `
+                     <div class="note">
+                     <span class="createdDate">${date}</span>
+                     <h3 class="noteHeading">${headingText}</h3>
+                     <p class="notePara">${text}</p>
+                     <span class="createdTime">${time}</span>
+                     </div>
+                     <div class="correction">
+                     <button class="noteEdit"> <img src="images/editNoteLight.svg" class=""></button>
+                     <button class="noteDelete"> <img src="images/deleteLight.svg" class=""></button>
+                     <button class="noteSave"> <img src="images/saveLight.svg" class=""></button>
+                     </div>
 
-  const journalHeading = document.createElement("h3");
-  journalHeading.setAttribute("class", "noteHeading");
-  journalHeading.innerText = `${headingText}`;
-
-  const noteEdit = document.createElement("button");
-  noteEdit.setAttribute("class", "noteEdit");
-
-  const noteDelete = document.createElement("button");
-  noteDelete.setAttribute("class", "noteDelete");
-
-  const noteSave = document.createElement("button");
-  noteSave.setAttribute("class", "noteSave");
-
-  const noteEditImage = document.createElement("img");
-  noteEditImage.src = "images/editNoteLight.svg";
-  noteEdit.appendChild(noteEditImage);
-
-  const noteDeleteImage = document.createElement("img");
-  noteDeleteImage.src = "images/deleteLight.svg";
-  noteDelete.appendChild(noteDeleteImage);
-
-  const noteSaveImage = document.createElement("img");
-  noteSaveImage.src = "images/saveLight.svg";
-  noteSave.appendChild(noteSaveImage);
-
-  diary.appendChild(journalHeading);
-  diary.appendChild(journalPara);
-  diaryContainer.appendChild(diary);
-  diaryContainer.appendChild(correction);
-  correction.appendChild(noteDelete);
-  correction.appendChild(noteEdit);
-  correction.appendChild(noteSave);
+                    `
   savedDiary.appendChild(diaryContainer);
+
+  const diary = diaryContainer.querySelector(".note");
+  const correction = diaryContainer.querySelector(".correction");
+  const journalHeading = diaryContainer.querySelector(".noteHeading");
+  const journalPara = diaryContainer.querySelector(".notePara");
+  const noteEdit = diaryContainer.querySelector(".noteEdit");
+  const noteDelete = diaryContainer.querySelector(".noteDelete");
+  const noteSave = diaryContainer.querySelector(".noteSave");
+
+
 
 
   noteDelete.addEventListener("click", () => {
@@ -147,15 +161,47 @@ function showJournal(text, headingText, id) {
           journalPara.innerText = paraEditInput.value;
         }
 
+        setData(localDataArray);
         diary.replaceChild(journalHeading, headingEditInput);
         diary.replaceChild(journalPara, paraEditInput);
 
-        setData(localDataArray);
 
         noteSave.style.opacity = "0.1";
         noteEdit.style.opacity = "1";
         noteEdit.disabled = false;
       };
+
+    };
+
+  });
+
+};
+
+
+
+
+
+
+
+function themeChanger() {
+  const theme = document.querySelector("#theme");
+
+  theme.addEventListener("mouseover", () => {
+    theme.style.cursor = "pointer";
+  });
+
+  theme.addEventListener("click", () => {
+    const themeData = document.body.classList;
+
+    if (themeData.contains('dark')) {
+      themeData.replace('dark', 'light');
+
+      theme.src = "images/lightMode.svg";
+
+    } else {
+      themeData.replace('light', 'dark');
+
+      theme.src = "images/darkMode.svg";
 
     };
 
