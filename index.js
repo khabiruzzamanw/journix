@@ -15,14 +15,25 @@ function noteCreation() {
 
     addNoteButton.addEventListener('click', () => {
 
-        inputItem.style.display = 'flex';
-        doneNoteButton.style.display = 'block';
+        // inputItem.style.display = 'flex';
+        inputItem.classList.remove("activeShowDown");
+        doneNoteButton.classList.remove("activeHide");
+        inputItem.classList.add("activeShowUp");
+        doneNoteButton.classList.add("activeShow");
+
+        // doneNoteButton.style.display = 'block';
 
     });
 
     doneNoteButton.addEventListener('click', () => {
-        inputItem.style.display = 'none';
-        doneNoteButton.style.display = 'none';
+        // inputItem.classList.replace("activeShowUp" , "activeShowDown");
+        // doneNoteButton.classList.replace("activeShow" ,"activeHide");
+        inputItem.classList.remove("activeShowUp");
+        doneNoteButton.classList.remove("activeShow");
+        inputItem.classList.add("activeShowDown");
+        doneNoteButton.classList.add("activeHide");
+        // inputItem.style.display = 'none';
+        // doneNoteButton.style.display = 'none';
     });
 
     addButton.addEventListener("click", (e) => {
@@ -86,21 +97,23 @@ function showJournal(text, headingText, id, date, time) {
     const savedDiary = document.querySelector("#savedDiary");
     const diaryContainer = document.createElement("div");
     diaryContainer.setAttribute("class", "noteContainer");
+    diaryContainer.classList.add("activeShowUp");
+
 
     diaryContainer.innerHTML = `
-    <div class="correction">
-    <button class="noteEdit"> <img src="images/editNoteLight.svg" class="noteEditImg"></button>
-    <button class="noteDelete"> <img src="images/deleteLight.svg" class="noteDeleteImg"></button>
-    <button class="noteSave"> <img src="images/saveLight.svg" class="noteSaveImg"></button>
-    </div>
-                     <div class="note">
-                     <span class="createdDate">${date}</span>
-                     <h3 class="noteHeading">${headingText}</h3>
-                     <p class="notePara">${text}</p>
-                     <span class="createdTime">${time}</span>
-                     </div>
+                                    <div class="correction">
+                                    <button class="noteEdit"> <img src="images/editNoteLight.svg" class="noteEditImg"></button>
+                                    <button class="noteDelete"> <img src="images/deleteLight.svg" class="noteDeleteImg"></button>
+                                    <button class="noteSave"> <img src="images/saveLight.svg" class="noteSaveImg"></button>
+                                    </div>
+                                    <div class="note">
+                                    <span class="createdDate">${date}</span>
+                                    <h3 class="noteHeading">${headingText}</h3>
+                                    <p class="notePara">${text}</p>
+                                    <span class="createdTime">${time}</span>
+                                    </div>
 
-                    `
+                                `
     savedDiary.appendChild(diaryContainer);
 
     const diary = diaryContainer.querySelector(".note");
@@ -203,7 +216,7 @@ function themeChanger() {
             themeData.replace('dark', 'light');
             addNoteButton.src = "images/addNoteDark.svg";
             doneNoteButton.src = "images/doneDark.svg";
-            searchbutton.src = "images/searchDark.svg" ;
+            searchbutton.src = "images/searchDark.svg";
             theme.src = "images/lightMode.svg";
 
             if (noteEditImg) {
@@ -230,7 +243,7 @@ function themeChanger() {
             themeData.replace('light', 'dark');
             addNoteButton.src = "images/addNoteLight.svg";
             doneNoteButton.src = "images/doneLight.svg";
-            searchbutton.src = "images/searchLight.svg" ;
+            searchbutton.src = "images/searchLight.svg";
             theme.src = "images/darkMode.svg";
             if (noteEditImg) {
 
