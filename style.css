@@ -315,7 +315,6 @@ aside>div {
 }
 
 
-
 .headInput {
   width: 100%;
   background: transparent;
@@ -325,8 +324,6 @@ aside>div {
   border: 1px solid var(--border);
   transition: all 0.25s ease-in;
 }
-
-
 
 
 .noteButtons {
