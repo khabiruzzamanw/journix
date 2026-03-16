@@ -25,7 +25,7 @@ const FILES = [
   "/journix/svgs/deleteLight.svg",
   "/journix/svgs/deleteDark.svg",
   "/journix/svgs/lightMode.svg",
-  "/journix/svgs/favicon.png"
+  "/journix/pngs/favicon.png"
 ];
 
 // install → cache all files
