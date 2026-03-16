@@ -1,9 +1,6 @@
-
 appFunction();
 
 function appFunction() {
-
-
   let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
 
   if (localDataArray.length > 0) {
@@ -267,7 +264,6 @@ function appFunction() {
     let journalDeleteImageSrc;
 
     if (document.body.classList.contains("dark")) {
-
       journalEditImageSrc = "svgs/editNoteLight.svg";
       journalDeleteImageSrc = "svgs/deleteLight.svg";
     } else {
@@ -437,7 +433,6 @@ function appFunction() {
     let todoDeleteImageSrc;
 
     if (document.body.classList.contains("dark")) {
-
       todoEditImageSrc = "svgs/editNoteLight.svg";
       todoDeleteImageSrc = "svgs/deleteLight.svg";
     } else {
@@ -545,7 +540,6 @@ function appFunction() {
   function noteUI(text, headingText, id, date, time, type) {
     const contentPage = document.querySelector("#contentPage");
 
-
     const warning = document.querySelector("#warning");
     if (warning) { warning.style.display = "none" };
 
@@ -557,7 +551,6 @@ function appFunction() {
     let noteDeleteImageSrc;
 
     if (document.body.classList.contains("dark")) {
-
       noteEditImageSrc = "svgs/editNoteLight.svg";
       noteDeleteImageSrc = "svgs/deleteLight.svg";
     } else {
@@ -752,10 +745,7 @@ function appFunction() {
       }
       else {
         if (warning) warning.style.display = "none";
-
       }
-
-
 
       searchedItems.forEach((element) => {
 
@@ -768,7 +758,6 @@ function appFunction() {
             journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
             break;
           case "todo":
-
             todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
             break;
 
@@ -987,7 +976,6 @@ function appFunction() {
   const typeSelector = document.querySelectorAll(".typeSelection").forEach((button) => {
     button.addEventListener("click", () => {
       const type = button.textContent.trim().toLowerCase();
-      // console.log(type);
       typeFunctionHandler(type);
     });
 
@@ -1019,7 +1007,6 @@ function appFunction() {
     }
     else {
       if (warning) warning.style.display = "none";
-
     }
 
     presentableObject.forEach((element) => {
@@ -1033,7 +1020,6 @@ function appFunction() {
           journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
           break;
         case "todo":
-
           todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
           break;
 
@@ -1043,8 +1029,7 @@ function appFunction() {
 }
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js");
+  navigator.serviceWorker.register("/journix/sw.js");
 } else {
   console.log(`serviceWorker isn't connected`);
-
 }
