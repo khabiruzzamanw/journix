@@ -10,6 +10,7 @@ function appFunction() {
 
   themeChanger();
   toggles();
+  typeSelectionFunction();
   noteCreation();
   getData(localDataArray);
 
@@ -104,8 +105,14 @@ function appFunction() {
       const headInput = document.createElement("input");
       headInput.setAttribute("class", "headInput");
       headInput.placeholder = `Write your ${type} heading`;
+
+      let timepicker;
       if (value === false) {
         headInput.style.display = "none";
+        timepicker = document.createElement("input");
+        timepicker.setAttribute("type", "time");
+        timepicker.setAttribute("class", "timepicker");
+        wrapper.append(timepicker);
       }
 
       wrapper.append(headInput);
@@ -126,10 +133,11 @@ function appFunction() {
 
         const text = textInput.value.trim();
         let headingText;
+        let pickedTime;
         if (value === true) {
           headingText = headInput.value.trim();
         } else {
-          headingText = type;
+          pickedTime = timepicker.value;
         }
 
         const timeDateDigit = new Date();
@@ -139,7 +147,7 @@ function appFunction() {
         const monthText = timeDateDigit.toLocaleDateString('en-GB', { month: 'long' });
         const dayText = timeDateDigit.toLocaleDateString('en-GB', { weekday: 'long' });
 
-        let todoTime = timeDateDigit.toLocaleTimeString();
+        let todoTime = pickedTime || timeDateDigit.toLocaleTimeString();
 
         if (text === '' || headingText === '') {
           toastFunction("You need to fill both 🙂", "deleteToast");
@@ -485,6 +493,12 @@ function appFunction() {
       const wrapper = document.createElement("div");
       wrapper.setAttribute("class", `${type}InputWrapper`);
 
+      const timePicker = document.createElement("input");
+      timePicker.setAttribute("type", "time");
+      // timepicker.setAttribute("class", "timepicker");
+      timePicker.setAttribute("class", `${type}timePicker`);
+      timePicker.value = todoTime.textContent;
+
       const textInput = document.createElement("textarea");
       textInput.setAttribute("class", `${type}TextInput`);
       textInput.value = todoPara.textContent;
@@ -500,6 +514,7 @@ function appFunction() {
       closeButton.textContent = 'Discard';
       closeButton.setAttribute("class", "closeButton");
 
+      wrapper.append(timePicker);
       wrapper.append(textInput);
       noteButtons.append(closeButton);
       noteButtons.append(saveButton);
@@ -522,8 +537,12 @@ function appFunction() {
           if (editableObject.text !== textInput.value) {
 
             editableObject.text = textInput.value;
-
             todoPara.textContent = textInput.value;
+          }
+          if (editableObject.todoDueTime !== timePicker.value) {
+
+            editableObject.todoDueTime = timePicker.value;
+            todoTime.textContent = timePicker.value;
           }
 
           setData(localDataArray);
@@ -870,8 +889,8 @@ function appFunction() {
         document.body.classList.replace("dark", "light");
         setIcons("light");
         localStorage.setItem("userTheme", "light");
-
       }
+
     });
 
 
@@ -895,65 +914,71 @@ function appFunction() {
         icon.src = imageIcons[themeKey].deleteIcon;
       });
 
-
     };
-
-
 
   };
 
 
-  const typeSelector = document.querySelectorAll(".typeSelection").forEach((button) => {
-    button.addEventListener("click", () => {
-      const type = button.textContent.trim().toLowerCase();
-      typeFunctionHandler(type);
-    });
-
-  });
 
 
-  function typeFunctionHandler(type) {
+  function typeSelectionFunction() {
 
-    let presentableObject;
-
-    if (type === 'all') {
-      presentableObject = localDataArray;
-    } else {
-      presentableObject = localDataArray.filter((el) => {
-        return el.category === type;
+    const typeSelector = document.querySelectorAll(".typeSelection").forEach((button) => {
+      button.addEventListener("click", () => {
+        const type = button.textContent.trim().toLowerCase();
+        typeFunctionHandler(type);
       });
-    }
 
-    const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
-    const warning = document.querySelector("#warning");
-
-    card.forEach((element) => {
-      element.remove();
     });
 
+    function typeFunctionHandler(type) {
 
-    if (presentableObject.length === 0) {
-      if (warning) warning.style.display = "flex";
-    }
-    else {
-      if (warning) warning.style.display = "none";
-    }
+      let presentableObject;
 
-    presentableObject.forEach((element) => {
+      if (type === 'all') {
+        presentableObject = localDataArray;
+      } else {
+        presentableObject = localDataArray.filter((el) => {
+          return el.category === type;
+        });
+      }
 
-      switch (element.category) {
+      const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
+      const warning = document.querySelector("#warning");
 
-        case "note":
-          noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
-          break;
-        case "journal":
-          journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
-          break;
-        case "todo":
-          todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
-          break;
+      card.forEach((element) => {
+        element.remove();
+      });
 
-      };
-    });
-  }
-}
+
+      if (presentableObject.length === 0) {
+        if (warning) warning.style.display = "flex";
+      }
+      else {
+        if (warning) warning.style.display = "none";
+      }
+
+      presentableObject.forEach((element) => {
+
+        switch (element.category) {
+
+          case "note":
+            noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
+            break;
+          case "journal":
+            journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
+            break;
+          case "todo":
+            todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
+            break;
+
+        };
+      });
+    };
+
+  };
+
+
+
+
+};
