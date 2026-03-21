@@ -143,7 +143,6 @@ aside {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
   border-right: 1px solid var(--border);
   padding: 0 1rem 2rem 1rem;
   overflow: hidden;
@@ -155,12 +154,13 @@ aside {
 .tabIcon {
   padding: 0.5rem;
   border-radius: 0.5rem;
+  opacity:0.75;
   cursor: pointer;
   transition: all 0.25s ease-in-out;
 }
 
-
 .tabIcon:hover {
+    opacity:1;
   background: var(--button);
 }
 
@@ -172,8 +172,8 @@ aside {
 .sideBarButton {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
-  padding-left: 2rem;
+  justify-content: end;
+  align-items: center;
   border: none;
 }
 
@@ -327,7 +327,7 @@ aside>div {
 }
 
 
-.noteButtons {
+.logButtons {
   width: 100%;
   display: flex;
   justify-content: space-evenly;
@@ -458,7 +458,7 @@ aside>div {
   position: fixed;
   bottom: 5rem;
   right: 1rem;
-  z-index: 300;
+  z-index: 1000;
   animation: toastAnimation 5s ease-in-out both;
   background: var(--blured);
   backdrop-filter: blur(4px);
@@ -474,7 +474,7 @@ aside>div {
   position: fixed;
   bottom: 2rem;
   right: 1rem;
-  z-index: 300;
+  z-index: 1000;
   animation: toastAnimation 5s ease-in-out both;
   background: var(--blured);
   backdrop-filter: blur(4px);
@@ -806,6 +806,7 @@ aside>div {
   border-radius: 1rem;
   display: grid;
   grid-template-columns: 1fr auto auto;
+  place-items: center;
   overflow: clip;
   border: 2px solid transparent;
   border-top: 2px solid var(--todo-accent);
@@ -825,16 +826,23 @@ aside>div {
   flex-direction: column;
   justify-content: space-between;
   row-gap: 0.5rem;
-  padding: 1rem 0 1rem 1rem;
+  padding: 0 0 0 1rem;
 }
 
-.todoCreatedDateTime {
+.todoCreatedData {
   font-family: sans-serif;
   font-size: 0.75rem;
   color: var(--text-muted);
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
 }
 
+.todoCorrection {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+justify-content: center; */
+  /* padding:auto 0; */
+}
 
 .todoPara {
   width: 100%;
@@ -849,7 +857,7 @@ aside>div {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 1rem 0;
+  padding: 1rem 0.5rem;
 }
 
 .dueTime {
@@ -865,17 +873,25 @@ aside>div {
   padding: 0.25rem 0;
 }
 
-
-.todoCorrection {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-
 .todoType {
   background: var(--todo-accent);
+}
+
+.timepicker {
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  border: 0.1rem solid var(--border);
+  border-radius: 1rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: sans-serif;
+  cursor: pointer;
+  transition: border-color 0.25s ease-in, background 0.25s ease-in;
+}
+
+.timepicker:focus {
+  border-color: var(--accent);
 }
 
 /* ================ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ============= */

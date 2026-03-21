@@ -55,44 +55,45 @@ function appFunction() {
 
           switch (button.textContent.trim().toLowerCase()) {
             case "note":
-              formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note");
+              formShow(true, "note");
 
               break;
             case "journal":
-              formShow("journalInputContainer", "journalInputWrapper", true, "journalTextInput", "journal");
+              formShow(true, "journal");
 
               break;
             case "todo":
-              formShow("todoInputContainer", "todoInputWrapper", false, "todoTextInput", "todo");
+              formShow(false, "todo");
               break;
 
             default:
-              formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note");
+              formShow(true, "note");
               break;
-          }
+          };
+
           bluredBg.remove();
         });
       });
     }
 
-    function formShow(containerName, wrapperName, value, textName, type) {
+    function formShow(value, type) {
 
-      if (document.querySelector(`.${containerName}`)) {
+      if (document.querySelector(`.${type}InputContainer`)) {
         return;
       }
 
       const container = document.createElement("div");
-      container.setAttribute("class", `${containerName}`);
+      container.setAttribute("class", `${type}InputContainer`);
 
       const wrapper = document.createElement("div");
-      wrapper.setAttribute("class", `${wrapperName}`);
+      wrapper.setAttribute("class", `${type}InputWrapper`);
 
       const textInput = document.createElement("textarea");
-      textInput.setAttribute("class", `${textName}`);
+      textInput.setAttribute("class", `${type}TextInput`);
       textInput.placeholder = `Your ${type} context`;
 
-      const noteButtons = document.createElement("div");
-      noteButtons.setAttribute("class", "noteButtons");
+      const logButtons = document.createElement("div");
+      logButtons.setAttribute("class", "logButtons");
 
       const saveButton = document.createElement("button");
       saveButton.textContent = 'Save entry';
@@ -117,9 +118,9 @@ function appFunction() {
 
       wrapper.append(headInput);
       wrapper.append(textInput);
-      noteButtons.append(closeButton);
-      noteButtons.append(saveButton);
-      wrapper.append(noteButtons);
+      logButtons.append(closeButton);
+      logButtons.append(saveButton);
+      wrapper.append(logButtons);
 
       container.append(wrapper);
       document.body.append(container);
@@ -149,46 +150,51 @@ function appFunction() {
 
         let todoTime = pickedTime || timeDateDigit.toLocaleTimeString();
 
-        if (text === '' || headingText === '') {
-          toastFunction("You need to fill both 🙂", "deleteToast");
-        } else {
-          const obj = {
-            heading: headingText,
-            text: text,
-            id: Date.now(),
-            date: dateDigit,
-            time: timeDigit,
-            category: type,
-            dateNumber: numberedDate,
-            month: monthText,
-            day: dayText,
-            todoDueTime: todoTime
-          };
 
-          localDataArray.push(obj);
+        if (type === "todo" && text === '') {
+          return toastFunction("You need to put a task 🙂", "deleteToast");
+        };
 
-          setData(localDataArray);
-
-          switch (obj.category) {
-            case "note":
-              noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.category);
-              break;
-            case "journal":
-              journalUI(obj.heading, obj.text, obj.day, obj.month, obj.dateNumber, obj.date, obj.time, obj.id, obj.category);
-              break;
-            case "todo":
-              todoUI(obj.text, obj.date, obj.time, obj.todoDueTime, obj.id, obj.category);
-              break;
-
-            default:
-              noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.category);
-              break;
+        if (type !== "todo") {
+          if (text === '' || headingText === '') {
+            return toastFunction("You need to fill both 🙂", "deleteToast");
           }
-          toastFunction(`${type} is added`, "addToast");
+        };
 
-          textInput.value = "";
-          headInput.value = "";
-        }
+        const obj = {
+          heading: headingText,
+          text: text,
+          id: Date.now(),
+          date: dateDigit,
+          time: timeDigit,
+          category: type,
+          dateNumber: numberedDate,
+          month: monthText,
+          day: dayText,
+          todoDueTime: todoTime
+        };
+
+        localDataArray.push(obj);
+
+        setData(localDataArray);
+
+        switch (obj.category) {
+
+          case "note":
+            renderUI(obj, false);
+            break;
+          case "journal":
+            renderUI(obj, false);
+            break;
+          case "todo":
+            renderUI(obj, true);
+            break;
+        };
+        toastFunction(`${obj.category} is added`, "addToast");
+
+        textInput.value = "";
+        headInput.value = "";
+
 
         container.remove();
 
@@ -208,389 +214,82 @@ function appFunction() {
       switch (element.category) {
 
         case "note":
-          noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
+          renderUI(element, false);
           break;
         case "journal":
-          journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
+          renderUI(element, false);
           break;
         case "todo":
-
-          todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
+          renderUI(element, true);
           break;
-
-        default:
-          noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
-          break;
-
-      }
+      };
     });
   };
 
-
-  function journalUI(headingText, text, day, month, dateNumber, date, time, id, type) {
-    const contentPage = document.querySelector("#contentPage");
-    const warning = document.querySelector("#warning");
-    if (warning) { warning.style.display = "none" };
-
-    const journalContainer = document.createElement("div");
-    journalContainer.setAttribute("class", "journalContainer");
-    journalContainer.classList.add("activeShowUp");
-
-    const journalDateWrapper = document.createElement("div");
-    journalDateWrapper.setAttribute("class", "journalDateWrapper");
-    const journalDate = document.createElement("p");
-    journalDate.setAttribute("class", "journalDate");
-
-    const journal = document.createElement("div");
-    journal.setAttribute("class", "journal");
-
-    const journalHead = document.createElement("h3");
-    journalHead.setAttribute("class", "journalHead");
-
-    const journalPara = document.createElement("p");
-    journalPara.setAttribute("class", "journalPara");
-
-    const journalLastSection = document.createElement("div");
-    journalLastSection.setAttribute("class", "journalLastSection");
-
-    const createdData = document.createElement("div");
-    createdData.setAttribute("class", "createdData");
-
-    const correction = document.createElement("div");
-    correction.setAttribute("class", "correction");
-
-    const createdDateTime = document.createElement("p");
-    createdDateTime.setAttribute("class", "createdDateTime");
-
-    const journalEditImage = document.createElement("img");
-    journalEditImage.setAttribute("class", "journalEditImage icon");
-
-    const journalDeleteImage = document.createElement("img");
-    journalDeleteImage.setAttribute("class", "journalDeleteImage icon");
-
-    let journalEditImageSrc;
-    let journalDeleteImageSrc;
-
-    if (document.body.classList.contains("dark")) {
-      journalEditImageSrc = "svgs/editNoteLight.svg";
-      journalDeleteImageSrc = "svgs/deleteLight.svg";
-    } else {
-      journalEditImageSrc = "svgs/editNoteDark.svg";
-      journalDeleteImageSrc = "svgs/deleteDark.svg";
-    }
-    journalEditImage.src = journalEditImageSrc;
-    journalDeleteImage.src = journalDeleteImageSrc;
-
-
-    journalHead.textContent = headingText;
-    journalPara.textContent = text;
-    journalDate.textContent = `${day} ,${month} ${dateNumber}`;
-    createdDateTime.textContent = `${date} | ${time}`;
-
-
-
-    journalDateWrapper.append(journalDate);
-    journal.append(journalDateWrapper);
-    journal.append(journalHead);
-    journal.append(journalPara);
-    createdData.append(createdDateTime);
-    correction.append(journalEditImage);
-    correction.append(journalDeleteImage);
-    journalLastSection.append(createdData);
-    journalLastSection.append(correction);
-    journalContainer.append(journal);
-    journalContainer.append(journalLastSection);
-
-
-    const fragment = document.createDocumentFragment();
-    fragment.append(journalContainer);
-    contentPage.appendChild(fragment);
-
-    journalDeleteImage.addEventListener("click", () => {
-      localDataArray = localDataArray.filter((journal) => {
-        return journal.id !== id;
-      });
-
-      setData(localDataArray);
-      journalContainer.remove();
-      toastFunction(`${type} is deleted`, "deleteToast");
-
-      if (localDataArray.length === 0) {
-        const warning = document.querySelector("#warning");
-        if (warning) warning.style.display = "flex";
-      }
-    });
-
-
-    journalEditImage.onclick = noteEditAndSave;
-    function noteEditAndSave() {
-
-      if (document.querySelector(`.${type}InputContainer`)) {
-        return;
-      }
-
-      const container = document.createElement("div");
-      container.setAttribute("class", `${type}InputContainer`);
-
-      const wrapper = document.createElement("div");
-      wrapper.setAttribute("class", `${type}InputWrapper`);
-
-      const headInput = document.createElement("input");
-      headInput.setAttribute("class", "headInput");
-      headInput.value = journalHead.textContent;
-      const textInput = document.createElement("textarea");
-      textInput.setAttribute("class", `${type}TextInput`);
-      textInput.value = journalPara.textContent;
-
-      const noteButtons = document.createElement("div");
-      noteButtons.setAttribute("class", "noteButtons");
-
-      const saveButton = document.createElement("button");
-      saveButton.textContent = 'Save entry';
-      saveButton.setAttribute("class", "saveButton");
-
-      const closeButton = document.createElement("button");
-      closeButton.textContent = 'Discard';
-      closeButton.setAttribute("class", "closeButton");
-
-
-      wrapper.append(headInput);
-      wrapper.append(textInput);
-      noteButtons.append(closeButton);
-      noteButtons.append(saveButton);
-      wrapper.append(noteButtons);
-
-      container.append(wrapper);
-      document.body.append(container);
-
-      closeButton.addEventListener("click", () => {
-        container.remove();
-      });
-
-      saveButton.addEventListener("click", () => {
-        const editableObject = localDataArray.find((element) => {
-
-          return element.id === id;
-        })
-        if (editableObject) {
-
-          if (editableObject.heading !== headInput.value || editableObject.text !== textInput.value) {
-
-            editableObject.heading = headInput.value;
-            editableObject.text = textInput.value;
-
-            journalHead.textContent = headInput.value;
-            journalPara.textContent = textInput.value;
-          }
-
-          setData(localDataArray);
-
-        };
-
-        container.remove();
-      });
-
-    };
-  };
-
-
-  function todoUI(text, date, time, todoDueTime, id, type) {
+  function renderUI(dataObject, value) {
 
     const contentPage = document.querySelector("#contentPage");
     const warning = document.querySelector("#warning");
     if (warning) { warning.style.display = "none" };
 
-    const todoContainer = document.createElement("div");
-    todoContainer.setAttribute("class", "todoContainer");
-    todoContainer.classList.add("activeShowUp");
+    const theType = dataObject.category;
 
-    const todo = document.createElement("div");
-    todo.setAttribute("class", "todo");
+    const logContainer = document.createElement("div");
+    logContainer.setAttribute("class", `${theType}Container`);
+    logContainer.classList.add("activeShowUp");
 
-    const dueTime = document.createElement("div");
-    dueTime.setAttribute("class", "dueTime");
-
-    const dueTimeText = document.createElement("p");
-    dueTimeText.setAttribute("class", "dueTimeText");
-
-    const todoTime = document.createElement("p");
-    todoTime.setAttribute("class", "todoTime");
-
-    const todoPara = document.createElement("p");
-    todoPara.setAttribute("class", "todoPara");
-
-    const todoCreatedDateTime = document.createElement("p");
-    todoCreatedDateTime.setAttribute("class", "todoCreatedDateTime");
-
-    const todoCorrection = document.createElement("div");
-    todoCorrection.setAttribute("class", "todoCorrection");
-
-    const todoEditImage = document.createElement("img");
-    todoEditImage.setAttribute("class", "todoEditImage icon");
-
-    const todoDeleteImage = document.createElement("img");
-    todoDeleteImage.setAttribute("class", "todoDeleteImage icon");
-
-
-    todoPara.textContent = text;
-    todoCreatedDateTime.textContent = `${date} | ${time}`;
-    todoTime.textContent = todoDueTime;
-    dueTimeText.textContent = `Todo is due to`
-
-    let todoEditImageSrc;
-    let todoDeleteImageSrc;
+    let editImageSrc;
+    let deleteImageSrc;
 
     if (document.body.classList.contains("dark")) {
-      todoEditImageSrc = "svgs/editNoteLight.svg";
-      todoDeleteImageSrc = "svgs/deleteLight.svg";
+      editImageSrc = "svgs/editLight.svg";
+      deleteImageSrc = "svgs/deleteLight.svg";
     } else {
-      todoEditImageSrc = "svgs/editNoteDark.svg";
-      todoDeleteImageSrc = "svgs/deleteDark.svg";
-    }
-    todoEditImage.src = todoEditImageSrc;
-    todoDeleteImage.src = todoDeleteImageSrc;
-
-    todo.append(todoPara);
-    todo.append(todoCreatedDateTime);
-    todoCorrection.append(todoEditImage);
-    todoCorrection.append(todoDeleteImage);
-    dueTime.append(dueTimeText);
-    dueTime.append(todoTime);
-    todoContainer.append(todo);
-    todoContainer.append(dueTime);
-    todoContainer.append(todoCorrection);
-    const fragment = document.createDocumentFragment();
-    fragment.append(todoContainer);
-    contentPage.appendChild(fragment);
-
-
-    todoDeleteImage.addEventListener("click", () => {
-      localDataArray = localDataArray.filter((todo) => {
-        return todo.id !== id;
-      });
-
-      setData(localDataArray);
-      todoContainer.remove();
-      toastFunction(`${type} is deleted`, "deleteToast");
-
-      if (localDataArray.length === 0) {
-        const warning = document.querySelector("#warning");
-        if (warning) warning.style.display = "flex";
-      }
-    });
-
-
-    todoEditImage.onclick = noteEditAndSave;
-    function noteEditAndSave() {
-
-      if (document.querySelector(`.${type}InputContainer`)) {
-        return;
-      }
-
-      const container = document.createElement("div");
-      container.setAttribute("class", `${type}InputContainer`);
-
-      const wrapper = document.createElement("div");
-      wrapper.setAttribute("class", `${type}InputWrapper`);
-
-      const timePicker = document.createElement("input");
-      timePicker.setAttribute("type", "time");
-      // timepicker.setAttribute("class", "timepicker");
-      timePicker.setAttribute("class", `${type}timePicker`);
-      timePicker.value = todoTime.textContent;
-
-      const textInput = document.createElement("textarea");
-      textInput.setAttribute("class", `${type}TextInput`);
-      textInput.value = todoPara.textContent;
-
-      const noteButtons = document.createElement("div");
-      noteButtons.setAttribute("class", "noteButtons");
-
-      const saveButton = document.createElement("button");
-      saveButton.textContent = 'Save entry';
-      saveButton.setAttribute("class", "saveButton");
-
-      const closeButton = document.createElement("button");
-      closeButton.textContent = 'Discard';
-      closeButton.setAttribute("class", "closeButton");
-
-      wrapper.append(timePicker);
-      wrapper.append(textInput);
-      noteButtons.append(closeButton);
-      noteButtons.append(saveButton);
-      wrapper.append(noteButtons);
-
-      container.append(wrapper);
-      document.body.append(container);
-
-      closeButton.addEventListener("click", () => {
-        container.remove();
-      });
-
-      saveButton.addEventListener("click", () => {
-        const editableObject = localDataArray.find((element) => {
-
-          return element.id === id;
-        })
-        if (editableObject) {
-
-          if (editableObject.text !== textInput.value) {
-
-            editableObject.text = textInput.value;
-            todoPara.textContent = textInput.value;
-          }
-          if (editableObject.todoDueTime !== timePicker.value) {
-
-            editableObject.todoDueTime = timePicker.value;
-            todoTime.textContent = timePicker.value;
-          }
-
-          setData(localDataArray);
-
-        };
-
-        container.remove();
-      });
-
-    };
-  };
-
-
-  function noteUI(text, headingText, id, date, time, type) {
-    const contentPage = document.querySelector("#contentPage");
-
-    const warning = document.querySelector("#warning");
-    if (warning) { warning.style.display = "none" };
-
-    const noteContainer = document.createElement("div");
-    noteContainer.setAttribute("class", "noteContainer");
-    noteContainer.classList.add("activeShowUp");
-
-    let noteEditImageSrc;
-    let noteDeleteImageSrc;
-
-    if (document.body.classList.contains("dark")) {
-      noteEditImageSrc = "svgs/editNoteLight.svg";
-      noteDeleteImageSrc = "svgs/deleteLight.svg";
-    } else {
-      noteEditImageSrc = "svgs/editNoteDark.svg";
-      noteDeleteImageSrc = "svgs/deleteDark.svg";
+      editImageSrc = "svgs/editDark.svg";
+      deleteImageSrc = "svgs/deleteDark.svg";
     }
 
-    const note = document.createElement("div");
-    note.setAttribute("class", "note");
+    const log = document.createElement("div");
+    log.setAttribute("class", `${theType}`);
 
-    const noteHead = document.createElement("h3");
-    noteHead.setAttribute("class", "noteHead");
+    const logHead = document.createElement("h3");
+    logHead.setAttribute("class", `${theType}Head`);
 
-    const notePara = document.createElement("p");
-    notePara.setAttribute("class", "notePara");
+    const logPara = document.createElement("p");
+    logPara.setAttribute("class", `${theType}Para`);
 
     const dividerLine = document.createElement("span");
     dividerLine.setAttribute("class", "dividerLine");
 
-    const noteLastSection = document.createElement("div");
-    noteLastSection.setAttribute("class", "noteLastSection");
+    const logLastSection = document.createElement("div");
+    logLastSection.setAttribute("class", `${theType}LastSection`);
+
+    let todoCreatedData;
+    let todoCorrection;
+
+    let journalDateWrapper;
+    let journalDate;
+
+    if (theType === "todo") {
+
+      todoCreatedData = document.createElement("div");
+      todoCreatedData.setAttribute("class", `${theType}CreatedData`);
+
+      todoCorrection = document.createElement("div");
+      todoCorrection.setAttribute("class", `${theType}Correction`);
+    };
+
+    if (theType === "journal") {
+
+      journalDateWrapper = document.createElement("div");
+      journalDateWrapper.setAttribute("class", "journalDateWrapper");
+
+      journalDate = document.createElement("p");
+      journalDate.setAttribute("class", "journalDate");
+
+      journalDate.textContent = `${dataObject.date} ,${dataObject.month} ${dataObject.dateNumber}`;
+    };
+
 
     const createdData = document.createElement("div");
     createdData.setAttribute("class", "createdData");
@@ -598,50 +297,90 @@ function appFunction() {
     const correction = document.createElement("div");
     correction.setAttribute("class", "correction");
 
+
     const createdDateTime = document.createElement("p");
     createdDateTime.setAttribute("class", "createdDateTime");
 
-    const noteEditImage = document.createElement("img");
-    noteEditImage.setAttribute("class", "noteEditImage icon");
 
-    const noteDeleteImage = document.createElement("img");
-    noteDeleteImage.setAttribute("class", "noteDeleteImage icon");
+    const logEditImage = document.createElement("img");
+    logEditImage.setAttribute("class", `${theType}EditImage icon`);
+
+    const logDeleteImage = document.createElement("img");
+    logDeleteImage.setAttribute("class", `${theType}DeleteImage icon`);
 
 
 
-    createdDateTime.textContent = `${date} | ${time}`;
-    noteHead.textContent = headingText;
-    notePara.textContent = text;
 
-    noteEditImage.src = noteEditImageSrc;
-    noteDeleteImage.src = noteDeleteImageSrc;
 
-    note.append(noteHead);
-    note.append(dividerLine);
-    note.append(notePara);
+    createdDateTime.textContent = `${dataObject.date} | ${dataObject.time}`;
+    logHead.textContent = dataObject.heading;
+    logPara.textContent = dataObject.text;
 
-    noteLastSection.append(createdData);
-    createdData.append(createdDateTime);
-    noteLastSection.append(correction);
-    correction.append(noteEditImage);
-    correction.append(noteDeleteImage);
+    logEditImage.src = editImageSrc;
+    logDeleteImage.src = deleteImageSrc;
 
-    noteContainer.append(note);
-    noteContainer.append(noteLastSection);
+    if (theType === "journal") {
+      journalDateWrapper.append(journalDate);
+      log.append(journalDateWrapper);
+    }
+
+    log.append(logHead);
+    if (theType !== "todo" && theType !== "journal") {
+      log.append(dividerLine);
+    };
+
+    log.append(logPara);
+
+    if (theType !== "todo") {
+
+      createdData.append(createdDateTime);
+      logLastSection.append(createdData);
+      logLastSection.append(correction);
+      correction.append(logEditImage);
+      correction.append(logDeleteImage);
+    } else {
+      todoCreatedData.append(createdDateTime);
+      log.append(todoCreatedData);
+      logLastSection.append(todoCorrection);
+      todoCorrection.append(logEditImage);
+      todoCorrection.append(logDeleteImage);
+    };
+
+    logContainer.append(log);
+
+    if (value === true) {
+      const dueTime = document.createElement("div");
+      dueTime.setAttribute("class", "dueTime");
+
+      const dueTimeText = document.createElement("p");
+      dueTimeText.setAttribute("class", "dueTimeText");
+
+      const todoTime = document.createElement("p");
+      todoTime.setAttribute("class", "todoTime");
+
+      todoTime.textContent = dataObject.todoDueTime;
+      dueTimeText.textContent = `Todo is due to`;
+
+      dueTime.append(dueTimeText);
+      dueTime.append(todoTime);
+      logContainer.append(dueTime);
+    };
+
+    logContainer.append(logLastSection);
 
     const fragment = document.createDocumentFragment();
-    fragment.append(noteContainer);
+    fragment.append(logContainer);
     contentPage.appendChild(fragment);
 
 
-    noteDeleteImage.addEventListener("click", () => {
-      localDataArray = localDataArray.filter((journal) => {
-        return journal.id !== id;
+    logDeleteImage.addEventListener("click", () => {
+      localDataArray = localDataArray.filter((el) => {
+        return el.id !== dataObject.id;
       });
 
       setData(localDataArray);
-      noteContainer.remove();
-      toastFunction(`${type} is deleted`, "deleteToast");
+      logContainer.remove();
+      toastFunction(`${theType} is deleted`, "deleteToast");
 
       if (localDataArray.length === 0) {
         const warning = document.querySelector("#warning");
@@ -650,28 +389,31 @@ function appFunction() {
     });
 
 
-    noteEditImage.onclick = noteEditAndSave;
-    function noteEditAndSave() {
+    logEditImage.onclick = logEditAndSave;
+    function logEditAndSave() {
 
-      if (document.querySelector(`.${type}InputContainer`)) {
+      if (document.querySelector(`.${theType}InputContainer`)) {
         return;
       }
 
       const container = document.createElement("div");
-      container.setAttribute("class", `${type}InputContainer`);
+      container.setAttribute("class", `${theType}InputContainer`);
 
       const wrapper = document.createElement("div");
-      wrapper.setAttribute("class", `${type}InputWrapper`);
+      wrapper.setAttribute("class", `${theType}InputWrapper`);
+      let headInput;
+      if (theType !== "todo") {
+        headInput = document.createElement("input");
+        headInput.setAttribute("class", "headInput");
+        headInput.value = logHead.textContent;
+      }
 
-      const headInput = document.createElement("input");
-      headInput.setAttribute("class", "headInput");
-      headInput.value = noteHead.textContent;
       const textInput = document.createElement("textarea");
-      textInput.setAttribute("class", `${type}TextInput`);
-      textInput.value = notePara.textContent;
+      textInput.setAttribute("class", `${theType}TextInput`);
+      textInput.value = logPara.textContent;
 
-      const noteButtons = document.createElement("div");
-      noteButtons.setAttribute("class", "noteButtons");
+      const logButtons = document.createElement("div");
+      logButtons.setAttribute("class", "logButtons");
 
       const saveButton = document.createElement("button");
       saveButton.textContent = 'Save entry';
@@ -681,11 +423,13 @@ function appFunction() {
       closeButton.textContent = 'Discard';
       closeButton.setAttribute("class", "closeButton");
 
-      wrapper.append(headInput);
+      if (theType !== "todo") {
+        wrapper.append(headInput);
+      }
       wrapper.append(textInput);
-      noteButtons.append(closeButton);
-      noteButtons.append(saveButton);
-      wrapper.append(noteButtons);
+      logButtons.append(closeButton);
+      logButtons.append(saveButton);
+      wrapper.append(logButtons);
 
       container.append(wrapper);
       document.body.append(container);
@@ -697,7 +441,7 @@ function appFunction() {
       saveButton.addEventListener("click", () => {
         const editableObject = localDataArray.find((element) => {
 
-          return element.id === id;
+          return element.id === dataObject.id;
         })
         if (editableObject) {
 
@@ -706,8 +450,8 @@ function appFunction() {
             editableObject.heading = headInput.value;
             editableObject.text = textInput.value;
 
-            noteHead.textContent = headInput.value;
-            notePara.textContent = textInput.value;
+            logHead.textContent = headInput.value;
+            logPara.textContent = textInput.value;
           }
 
           setData(localDataArray);
@@ -720,6 +464,8 @@ function appFunction() {
     };
 
   };
+
+
 
 
   function toastFunction(message, name) {
@@ -727,9 +473,8 @@ function appFunction() {
     toast.innerHTML = `<p>${message}</p>`;
     toast.setAttribute("class", name);
     document.body.append(toast);
-
     setTimeout(() => toast.remove(), 5000);
-  }
+  };
 
 
   function toggles() {
@@ -771,19 +516,16 @@ function appFunction() {
         switch (element.category) {
 
           case "note":
-            noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
+            renderUI(element, false);
             break;
           case "journal":
-            journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
+            renderUI(element, false);
             break;
           case "todo":
-            todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
+            renderUI(element, true);
             break;
-
         };
-
       });
-
     });
 
     function sideBarToggle() {
@@ -841,11 +583,11 @@ function appFunction() {
 
     const imageIcons = {
       light: {
-        addNoteIcon: "svgs/addNoteDark.svg",
-        editIcon: "svgs/editNoteDark.svg",
-        emptyNoteIcon: "svgs/emptyNoteDark.svg",
+        addNoteIcon: "svgs/addDark.svg",
+        editIcon: "svgs/editDark.svg",
+        emptyNoteIcon: "svgs/emptyDark.svg",
         themeIcon: "svgs/lightMode.svg",
-        categoryIcon: "svgs/categoryIconDark.svg",
+        categoryIcon: "svgs/categoryDark.svg",
         daySelectionIcon: "svgs/daySelectionDark.svg",
         deleteIcon: "svgs/deleteDark.svg",
         dropDownIcon: "svgs/dropDownDark.svg",
@@ -855,11 +597,11 @@ function appFunction() {
       },
 
       dark: {
-        addNoteIcon: "svgs/addNoteLight.svg",
-        editIcon: "svgs/editNoteLight.svg",
-        emptyNoteIcon: "svgs/emptyNoteLight.svg",
+        addNoteIcon: "svgs/addLight.svg",
+        editIcon: "svgs/editLight.svg",
+        emptyNoteIcon: "svgs/emptyLight.svg",
         themeIcon: "svgs/darkMode.svg",
-        categoryIcon: "svgs/categoryIconLight.svg",
+        categoryIcon: "svgs/categoryLight.svg",
         daySelectionIcon: "svgs/daySelectionLight.svg",
         deleteIcon: "svgs/deleteLight.svg",
         dropDownIcon: "svgs/dropDownLight.svg",
@@ -963,22 +705,18 @@ function appFunction() {
         switch (element.category) {
 
           case "note":
-            noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
+            renderUI(element, false);
             break;
           case "journal":
-            journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
+            renderUI(element, false);
             break;
           case "todo":
-            todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
+            renderUI(element, true);
             break;
-
         };
       });
     };
 
   };
-
-
-
 
 };
