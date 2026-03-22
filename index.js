@@ -10,6 +10,7 @@ function appFunction() {
 
   themeChanger();
   toggles();
+  daySelection();
   typeSelectionFunction();
   noteCreation();
   getData(localDataArray);
@@ -493,7 +494,7 @@ function appFunction() {
       search.value.trim().toLowerCase();
 
       let searchedItems = localDataArray.filter((element) => {
-        return element.heading.toLowerCase().includes(search.value.trim().toLowerCase()) || element.text.toLowerCase().includes(search.value.trim().toLowerCase());
+        return ((element.heading) || "").toLowerCase().includes(search.value.trim().toLowerCase()) || element.text.toLowerCase().includes(search.value.trim().toLowerCase());
       });
 
       const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
@@ -719,4 +720,106 @@ function appFunction() {
 
   };
 
+
+  function daySelection() {
+
+    document.querySelectorAll(".daySelectGrid li").forEach((day) => {
+      day.addEventListener("click", () => {
+        const selectedDay = day.textContent;
+        console.log(selectedDay);
+
+        const gotDate = new Date();
+
+        const todayYearOld = gotDate.toLocaleDateString('en-GB').replace(/\//g, ".");
+        const yesterdayDate = new Date();
+        yesterdayDate.setDate(gotDate.getDate() - 1);
+        const oneYearOld = yesterdayDate.toLocaleDateString('en-GB').replace(/\//g, ".");
+
+        let selectedDaydata;
+
+        switch (selectedDay) {
+          case "Today":
+            selectedDaydata = localDataArray.filter((el) => {
+              return el.date === todayYearOld;
+            });
+            break;
+          case "Yesterday":
+            selectedDaydata = localDataArray.filter((el) => {
+              return el.date === oneYearOld;
+            });
+            break;
+          case "Over a week":
+            selectedDaydata = localDataArray.filter((el) => {
+              return el.id < Date.now() - (7 * 86400000);
+            });
+            break;
+          case "Over a month":
+            selectedDaydata = localDataArray.filter((el) => {
+              return el.id < Date.now() - (30 * 86400000);
+            });
+            break;
+
+          default:
+            selectedDaydata = localDataArray;
+            break;
+        };
+
+
+        const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
+        const warning = document.querySelector("#warning");
+
+        card.forEach((element) => {
+          element.remove();
+        });
+
+
+        if (selectedDaydata.length === 0) {
+          if (warning) warning.style.display = "flex";
+        }
+        else {
+          if (warning) warning.style.display = "none";
+        }
+
+        selectedDaydata.forEach((element) => {
+
+          switch (element.category) {
+
+            case "note":
+              renderUI(element, false);
+              break;
+            case "journal":
+              renderUI(element, false);
+              break;
+            case "todo":
+              renderUI(element, true);
+              break;
+          };
+        });
+
+
+
+        // selectedDaydata.forEach((element, index) => {
+        //   switch (element.category) {
+
+        //     case "note":
+        //       renderUI(element, false);
+        //       break;
+        //     case "journal":
+        //       renderUI(element, false);
+        //       break;
+        //     case "todo":
+        //       renderUI(element, true);
+        //       break;
+        //   };
+        // });
+
+
+      })
+    });
+
+
+  };
+
+
 };
+
