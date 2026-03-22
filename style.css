@@ -69,7 +69,6 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: sans-serif;
-  /* transition: all 0.2s ease-in; */
   transition: background 0.2s ease-in, color 0.2s ease-in;
 }
 
@@ -132,7 +131,7 @@ main {
 }
 
 aside {
-  width: 10vw;
+  width: 12vw;
   height: calc(100vh - var(--header-height));
   background: var(--surface);
   position: sticky;
@@ -144,7 +143,7 @@ aside {
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
-  padding: 0 1rem 2rem 1rem;
+  padding: 0 1rem;
   overflow: hidden;
   transition: all 0.25s ease-in-out;
   text-wrap: nowrap;
@@ -154,13 +153,13 @@ aside {
 .tabIcon {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  opacity:0.75;
+  opacity: 0.75;
   cursor: pointer;
   transition: all 0.25s ease-in-out;
 }
 
 .tabIcon:hover {
-    opacity:1;
+  opacity: 1;
   background: var(--button);
 }
 
@@ -219,7 +218,7 @@ aside>div {
   display: flex;
   align-items: center;
   cursor: pointer;
-  column-gap: 1rem;
+  column-gap: 0.75rem;
 }
 
 .dropDown {
@@ -232,12 +231,14 @@ aside>div {
 .dropDown ul {
   display: flex;
   flex-direction: column;
-  padding: 1rem 0 0 3rem;
-  row-gap: 0.5rem;
+  padding: 0 0 0 3rem;
+  row-gap: 0.25rem;
   list-style-type: none;
 }
 
 .dropDown ul li {
+  color: var(--text-muted);
+  font-size: var(--font);
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -247,10 +248,10 @@ aside>div {
 
 .dropDown ul li:hover {
   background: var(--button);
+  color: var(--text);
 }
 
 .dropDown>* {
-
   overflow: hidden;
 }
 
@@ -522,24 +523,23 @@ aside>div {
 .note {
   display: flex;
   flex-direction: column;
-  row-gap: 2rem;
+  row-gap: 1rem;
   padding: 1rem;
 }
 
 .noteHead {
-  width: 100%;
   text-align: center;
   font-size: 1.5rem;
   font-family: sans-serif;
 }
 
 .notePara {
-  width: 100%;
   font-size: 1rem;
   opacity: 0.9;
   font-family: sans-serif;
   white-space: pre-wrap;
   word-break: break-word;
+  line-height: 1.6;
 }
 
 .noteLastSection {
@@ -702,27 +702,27 @@ aside>div {
   color: var(--text-muted);
 }
 
-
 .journal {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  row-gap: 0.5rem;
   padding: 1rem;
+  line-height: 1;
 }
 
 .journalHead {
-  width: 100%;
   font-size: 1.5rem;
   font-family: sans-serif;
+  margin-bottom: 1rem;
 }
 
 .journalPara {
-  width: 100%;
   font-size: 1rem;
   opacity: 0.9;
   font-family: sans-serif;
   white-space: pre-wrap;
   word-break: break-word;
+  line-height: 1.6;
 }
 
 .journalLastSection {
@@ -827,21 +827,19 @@ aside>div {
   justify-content: space-between;
   row-gap: 0.5rem;
   padding: 0 0 0 1rem;
+  border-right: 1px solid var(--border);
 }
 
 .todoCreatedData {
   font-family: sans-serif;
   font-size: 0.75rem;
   color: var(--text-muted);
-  padding: 0.5rem 0;
+  padding-top: 0.5rem;
 }
 
 .todoCorrection {
   display: flex;
   flex-direction: column;
-  /* align-items: center;
-justify-content: center; */
-  /* padding:auto 0; */
 }
 
 .todoPara {
@@ -856,11 +854,11 @@ justify-content: center; */
 .dueTime {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
   padding: 1rem 0.5rem;
 }
 
-.dueTime {
+.dueTimeText {
   font-size: 0.9rem;
   color: var(--text-muted);
   font-family: sans-serif;

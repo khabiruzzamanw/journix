@@ -424,6 +424,7 @@ function appFunction() {
       closeButton.textContent = 'Discard';
       closeButton.setAttribute("class", "closeButton");
 
+
       if (theType !== "todo") {
         wrapper.append(headInput);
       }
@@ -446,13 +447,16 @@ function appFunction() {
         })
         if (editableObject) {
 
-          if (editableObject.heading !== headInput.value || editableObject.text !== textInput.value) {
-
-            editableObject.heading = headInput.value;
+          if (editableObject.text !== textInput.value) {
             editableObject.text = textInput.value;
-
-            logHead.textContent = headInput.value;
             logPara.textContent = textInput.value;
+          }
+
+          if (theType !== "todo") {
+            if (editableObject.heading !== headInput.value) {
+              editableObject.heading = headInput.value;
+              logHead.textContent = headInput.value;
+            }
           }
 
           setData(localDataArray);
@@ -726,10 +730,8 @@ function appFunction() {
     document.querySelectorAll(".daySelectGrid li").forEach((day) => {
       day.addEventListener("click", () => {
         const selectedDay = day.textContent;
-        console.log(selectedDay);
 
         const gotDate = new Date();
-
         const todayYearOld = gotDate.toLocaleDateString('en-GB').replace(/\//g, ".");
         const yesterdayDate = new Date();
         yesterdayDate.setDate(gotDate.getDate() - 1);
@@ -738,6 +740,10 @@ function appFunction() {
         let selectedDaydata;
 
         switch (selectedDay) {
+          case "Alltime":
+            selectedDaydata = localDataArray;
+            break;
+
           case "Today":
             selectedDaydata = localDataArray.filter((el) => {
               return el.date === todayYearOld;
@@ -795,29 +801,8 @@ function appFunction() {
               break;
           };
         });
-
-
-
-        // selectedDaydata.forEach((element, index) => {
-        //   switch (element.category) {
-
-        //     case "note":
-        //       renderUI(element, false);
-        //       break;
-        //     case "journal":
-        //       renderUI(element, false);
-        //       break;
-        //     case "todo":
-        //       renderUI(element, true);
-        //       break;
-        //   };
-        // });
-
-
-      })
+      });
     });
-
-
   };
 
 
